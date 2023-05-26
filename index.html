@@ -13,7 +13,6 @@
     <script>
       const draw_cards = (cards) => {
         const movie_list = document.getElementsByClassName("movie-list")[0];
-
         movie_list.innerHTML = "";
 
         cards.forEach(({ poster_path, title, overview, vote_average }) => {
@@ -33,17 +32,22 @@
         });
       };
 
-      const load_movie = async () => {
+      const fetch_move = async (rest_url) => {
         const { results } = await fetch(
-          "https://api.themoviedb.org/3/movie/popular",
+          `https://api.themoviedb.org/3/${rest_url}`,
           {
             headers: {
-              accept: "application/json",
               Authorization:
                 "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIwODZhZjcxNzY0MTVhYjk3MWU5YjRjZWFhOTA0NTY4YiIsInN1YiI6IjY0NzBhMDI4YzVhZGE1MDBhODJkZmMwNiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.MW5UL8xFifiCQX7ozBfj0REWT4TL4S75oHk9Zki44-0",
             },
           }
         ).then((response) => response.json());
+
+        return results;
+      };
+
+      const load_movie = async () => {
+        const results = await fetch_move("movie/popular");
 
         draw_cards(results);
       };
@@ -55,16 +59,7 @@
 
         const keyword = search_box.value;
 
-        const { results } = await fetch(
-          `https://api.themoviedb.org/3/search/movie?query=${keyword}`,
-          {
-            headers: {
-              accept: "application/json",
-              Authorization:
-                "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIwODZhZjcxNzY0MTVhYjk3MWU5YjRjZWFhOTA0NTY4YiIsInN1YiI6IjY0NzBhMDI4YzVhZGE1MDBhODJkZmMwNiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.MW5UL8xFifiCQX7ozBfj0REWT4TL4S75oHk9Zki44-0",
-            },
-          }
-        ).then((response) => response.json());
+        const results = await fetch_move(`search/movie?query=${keyword}`);
 
         draw_cards(results);
       };
