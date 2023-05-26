@@ -3,11 +3,8 @@ header {
   align-items: center;
   justify-content: center;
   flex-direction: column;
-  gap: 2rem;
 
   height: 200px;
-
-  font-size: 2rem;
 }
 
 .search-form {
