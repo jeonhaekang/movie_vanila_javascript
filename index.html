@@ -4,11 +4,86 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <link rel="stylesheet" href="reset.css" />
+    <link rel="stylesheet" href="ui.css" />
+
     <title>영화검색</title>
+
+    <script>
+      const draw_cards = (cards) => {
+        const movie_list = document.getElementsByClassName("movie-list")[0];
+
+        movie_list.innerHTML = "";
+
+        cards.forEach(({ poster_path, title, overview, vote_average }) => {
+          const movie_item = `
+            <li class="movie-item">
+                <img class="movie-poster" src="https://image.tmdb.org/t/p/w500/${poster_path}" alt="${title} 포스터" />
+
+                <h2>${title}</h2>
+
+                <p>${overview}</p>
+
+                <p>Rating : ${vote_average}</p>
+            </li>
+          `;
+
+          movie_list.insertAdjacentHTML("beforeend", movie_item);
+        });
+      };
+
+      const load_movie = async () => {
+        const { results } = await fetch(
+          "https://api.themoviedb.org/3/movie/popular",
+          {
+            headers: {
+              accept: "application/json",
+              Authorization:
+                "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIwODZhZjcxNzY0MTVhYjk3MWU5YjRjZWFhOTA0NTY4YiIsInN1YiI6IjY0NzBhMDI4YzVhZGE1MDBhODJkZmMwNiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.MW5UL8xFifiCQX7ozBfj0REWT4TL4S75oHk9Zki44-0",
+            },
+          }
+        ).then((response) => response.json());
+
+        draw_cards(results);
+      };
+
+      const search_movie = async (event) => {
+        event.preventDefault();
+
+        const search_box = document.getElementsByClassName("search-box")[0];
+
+        const keyword = search_box.value;
+
+        const { results } = await fetch(
+          `https://api.themoviedb.org/3/search/movie?query=${keyword}`,
+          {
+            headers: {
+              accept: "application/json",
+              Authorization:
+                "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIwODZhZjcxNzY0MTVhYjk3MWU5YjRjZWFhOTA0NTY4YiIsInN1YiI6IjY0NzBhMDI4YzVhZGE1MDBhODJkZmMwNiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.MW5UL8xFifiCQX7ozBfj0REWT4TL4S75oHk9Zki44-0",
+            },
+          }
+        ).then((response) => response.json());
+
+        draw_cards(results);
+      };
+
+      onload = load_movie();
+    </script>
   </head>
   <body>
     <header>
       <h1>일해야 돈벌조</h1>
+
+      <form class="search-form" onsubmit="search_movie(event)">
+        <input class="search-box" />
+        <button>검색</button>
+      </form>
     </header>
+
+    <main>
+      <ul class="movie-list"></ul>
+    </main>
   </body>
 </html>
