@@ -16,9 +16,10 @@
 
         movie_list.innerHTML = "";
 
-        cards.forEach(({ poster_path, title, overview, vote_average }) => {
-          const movie_item = `
-            <li class="movie-item">
+        cards.forEach(
+          ({ id, poster_path, title, overview, vote_average, ...rest }) => {
+            const movie_item = `
+            <li class="movie-item" onclick="alert('movie_id : ${id}')">
                 <img class="movie-poster" src="https://image.tmdb.org/t/p/w500/${poster_path}" alt="${title} 포스터" />
 
                 <h2 class="movie-title">${title}</h2>
@@ -29,8 +30,9 @@
             </li>
           `;
 
-          movie_list.innerHTML += movie_item;
-        });
+            movie_list.innerHTML += movie_item;
+          }
+        );
       };
 
       const fetch_move = async (rest_url) => {
