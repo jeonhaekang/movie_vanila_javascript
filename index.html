@@ -13,6 +13,7 @@
     <script>
       const draw_cards = (cards) => {
         const movie_list = document.getElementsByClassName("movie-list")[0];
+
         movie_list.innerHTML = "";
 
         cards.forEach(({ poster_path, title, overview, vote_average }) => {
@@ -28,7 +29,7 @@
             </li>
           `;
 
-          movie_list.insertAdjacentHTML("beforeend", movie_item);
+          movie_list.innerHTML += movie_item;
         });
       };
 
