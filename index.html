@@ -9,10 +9,27 @@
     <link rel="stylesheet" href="ui.css" />
 
     <title>영화검색</title>
+  </head>
+  <body>
+    <header>
+      <h1>
+        <img src="assets/logo.png" width="100" alt="햇님 로고" />
+      </h1>
+
+      <form class="search-form" onsubmit="search_movie(event)">
+        <input class="search-box" />
+        <button>검색</button>
+      </form>
+    </header>
+
+    <main>
+      <ul class="movie-list"></ul>
+    </main>
 
     <script>
+      const movie_list = document.getElementsByClassName("movie-list")[0];
+
       const draw_cards = (cards) => {
-        const movie_list = document.getElementsByClassName("movie-list")[0];
         movie_list.innerHTML = "";
 
         movie_list.innerHTML = cards.reduce((movie_items, movie_item) => {
@@ -58,23 +75,7 @@
         draw_cards(cards);
       };
 
-      onload = load_movie();
+      load_movie();
     </script>
-  </head>
-  <body>
-    <header>
-      <h1>
-        <img src="assets/logo.png" width="100" alt="햇님 로고" />
-      </h1>
-
-      <form class="search-form" onsubmit="search_movie(event)">
-        <input class="search-box" />
-        <button>검색</button>
-      </form>
-    </header>
-
-    <main>
-      <ul class="movie-list"></ul>
-    </main>
   </body>
 </html>
