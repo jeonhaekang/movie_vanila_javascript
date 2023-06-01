@@ -13,26 +13,20 @@
     <script>
       const draw_cards = (cards) => {
         const movie_list = document.getElementsByClassName("movie-list")[0];
-
         movie_list.innerHTML = "";
 
-        cards.forEach(
-          ({ id, poster_path, title, overview, vote_average, ...rest }) => {
-            const movie_item = `
-            <li class="movie-item" onclick="alert('movie_id : ${id}')">
-                <img class="movie-poster" src="https://image.tmdb.org/t/p/w500/${poster_path}" alt="${title} 포스터" />
+        movie_list.innerHTML = cards.reduce((movie_items, movie_item) => {
+          const { id, poster_path, title, overview, vote_average } = movie_item;
 
-                <h2 class="movie-title">${title}</h2>
-
-                <p class="movie-desc">${overview}</p>
-
-                <p class="movie-rating">Rating : ${vote_average}</p>
-            </li>
-          `;
-
-            movie_list.innerHTML += movie_item;
-          }
-        );
+          return (movie_items += `
+              <li class="movie-item" onclick="alert('movie_id : ${id}')">
+                  <img class="movie-poster" src="https://image.tmdb.org/t/p/w500/${poster_path}" alt="${title} 포스터" />
+                  <h2 class="movie-title">${title}</h2>
+                  <p class="movie-desc">${overview}</p>
+                  <p class="movie-rating">Rating : ${vote_average}</p>
+              </li>
+            `);
+        }, "");
       };
 
       const fetch_move = async (rest_url) => {
@@ -50,21 +44,18 @@
       };
 
       const load_movie = async () => {
-        const results = await fetch_move("movie/popular");
-
-        draw_cards(results);
+        const cards = await fetch_move("movie/popular");
+        draw_cards(cards);
       };
 
       const search_movie = async (event) => {
         event.preventDefault();
 
         const search_box = document.getElementsByClassName("search-box")[0];
+        const search_keyword = search_box.value.trim;
 
-        const keyword = search_box.value;
-
-        const results = await fetch_move(`search/movie?query=${keyword}`);
-
-        draw_cards(results);
+        const cards = await fetch_move(`search/movie?query=${keyword}`);
+        draw_cards(cards);
       };
 
       onload = load_movie();
