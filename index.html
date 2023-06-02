@@ -29,13 +29,13 @@
     <script>
       let all_movie_list = [];
 
-      const draw_cards = cards => {
-        const movie_list = document.getElementsByClassName("movie-list")[0];
+      const draw_movie_list = movie_list => {
+        const movie_list_element = document.getElementsByClassName("movie-list")[0];
 
-        movie_list.innerHTML = cards.reduce((movie_items, movie_item) => {
+        movie_list_element.innerHTML = movie_list.reduce((_movie_list, movie_item) => {
           const { id, poster_path, title, overview, vote_average } = movie_item;
 
-          return (movie_items += `
+          return (_movie_list += `
               <li class="movie-item" onclick="alert('movie_id : ${id}')">
                   <img class="movie-poster" src="https://image.tmdb.org/t/p/w500/${poster_path}" alt="${title} 포스터" />
                   <h2 class="movie-title">${title}</h2>
@@ -60,7 +60,7 @@
       const load_movie = async () => {
         all_movie_list = await fetch_movie("movie/popular");
 
-        draw_cards(all_movie_list);
+        draw_movie_list(all_movie_list);
       };
 
       const search_movie = async event => {
@@ -74,7 +74,7 @@
         );
 
         search_movie_list.length > 0
-          ? draw_cards(search_movie_list)
+          ? draw_movie_list(search_movie_list)
           : alert("검색 결과가 없습니다.");
       };
 
