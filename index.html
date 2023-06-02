@@ -7,6 +7,7 @@
 
     <link rel="stylesheet" href="./styles/reset.css" />
     <link rel="stylesheet" href="./styles/ui.css" />
+    <script src="./src/main.js" type="module" defer></script>
 
     <title>영화검색</title>
   </head>
@@ -16,7 +17,7 @@
         <img src="assets/logo.png" width="100" alt="햇님 로고" />
       </figure>
 
-      <form class="search-form" onsubmit="searchMovie(event)">
+      <form class="search-form">
         <input class="search-box" />
         <button>검색</button>
       </form>
@@ -25,60 +26,5 @@
     <main>
       <ul class="movie-list"></ul>
     </main>
-
-    <script>
-      let allMovieList = [];
-
-      const drawMovieList = movieList => {
-        const movieListElement = document.querySelector(".movie-list");
-
-        movieListElement.innerHTML = movieList.reduce((newMovieList, movieItem) => {
-          const { id, poster_path, title, overview, vote_average } = movieItem;
-
-          return (newMovieList += `
-              <li class="movie-item" onclick="alert('movie_id : ${id}')">
-                  <img class="movie-poster" src="https://image.tmdb.org/t/p/w500/${poster_path}" alt="${title} 포스터" />
-                  <h2 class="movie-title">${title}</h2>
-                  <p class="movie-desc">${overview}</p>
-                  <p class="movie-rating">Rating : ${vote_average}</p>
-              </li>
-            `);
-        }, "");
-      };
-
-      const fetchMovie = async restUrl => {
-        const { results } = await fetch(`https://api.themoviedb.org/3/${restUrl}`, {
-          headers: {
-            Authorization:
-              "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIwODZhZjcxNzY0MTVhYjk3MWU5YjRjZWFhOTA0NTY4YiIsInN1YiI6IjY0NzBhMDI4YzVhZGE1MDBhODJkZmMwNiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.MW5UL8xFifiCQX7ozBfj0REWT4TL4S75oHk9Zki44-0"
-          }
-        }).then(response => response.json());
-
-        return results;
-      };
-
-      const loadMovie = async () => {
-        allMovieList = await fetchMovie("movie/popular");
-
-        drawMovieList(allMovieList);
-      };
-
-      const searchMovie = async event => {
-        event.preventDefault();
-
-        const searchBox = document.getElementsByClassName("search-box")[0];
-        const searchKeyword = searchBox.value.toUpperCase();
-
-        const searchMovieList = allMovieList.filter(({ title }) =>
-          title.toUpperCase().includes(searchKeyword)
-        );
-
-        searchMovieList.length > 0
-          ? drawMovieList(searchMovieList)
-          : alert("검색 결과가 없습니다.");
-      };
-
-      loadMovie();
-    </script>
   </body>
 </html>
