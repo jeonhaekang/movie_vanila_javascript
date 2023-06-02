@@ -69,11 +69,13 @@
         const search_box = document.getElementsByClassName("search-box")[0];
         const search_keyword = search_box.value.toUpperCase();
 
-        const filtered_movie_list = all_movie_list.filter(({ title }) =>
+        const search_movie_list = all_movie_list.filter(({ title }) =>
           title.toUpperCase().includes(search_keyword)
         );
 
-        draw_cards(filtered_movie_list);
+        search_movie_list.length > 0
+          ? draw_cards(search_movie_list)
+          : alert("검색 결과가 없습니다.");
       };
 
       load_movie();
