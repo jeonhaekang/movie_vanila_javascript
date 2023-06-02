@@ -1,5 +1,9 @@
-export const fetchMovie = async restUrl => {
-  const { results } = await fetch(`https://api.themoviedb.org/3/${restUrl}`, {
+import { toQueryString } from "./utils/index.js";
+
+export const fetchMovie = async (restUrl, params = {}) => {
+  const queryParams = toQueryString(params);
+
+  const { results } = await fetch(`https://api.themoviedb.org/3/${restUrl}?${queryParams}`, {
     headers: {
       Authorization:
         "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIwODZhZjcxNzY0MTVhYjk3MWU5YjRjZWFhOTA0NTY4YiIsInN1YiI6IjY0NzBhMDI4YzVhZGE1MDBhODJkZmMwNiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.MW5UL8xFifiCQX7ozBfj0REWT4TL4S75oHk9Zki44-0"
@@ -36,7 +40,9 @@ export const searchMovie = async () => {
   const searchInput = document.querySelector(".search-box");
   const searchKeyword = searchInput.value;
 
-  const searchMovieList = await fetchMovie(`search/movie?query=${searchKeyword}`);
+  const searchMovieList = await fetchMovie(`search/movie`, {
+    query: searchKeyword
+  });
 
   if (searchMovieList.length > 0) {
     drawMovieList(searchMovieList);
