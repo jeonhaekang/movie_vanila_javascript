@@ -6,11 +6,11 @@ export const routes = {
   "/detail": new DetailPage()
 };
 
-export const render = async pathname => {
+export const render = async (pathname, withCache) => {
   const rootElement = document.querySelector("#root");
 
   const page = routes[pathname];
-  rootElement.innerHTML = page.render();
+  rootElement.innerHTML = page.render(withCache);
 
   page.init();
 };
@@ -31,7 +31,7 @@ export const routeInit = () => {
   });
 
   window.addEventListener("popstate", () => {
-    render(location.pathname, false);
+    render(location.pathname, true);
   });
 
   render(location.pathname);
