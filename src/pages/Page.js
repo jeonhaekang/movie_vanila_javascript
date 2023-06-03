@@ -1,23 +1,27 @@
-const cache = {};
-
 export class Page {
-  constructor(innerHTML) {
-    this.content = innerHTML;
+  constructor(content, cache = {}) {
+    this.renderContent = content;
+    this.cache = cache;
+    this.rootElement = document.querySelector("#root");
 
     window.addEventListener("history", this.caching.bind(this));
   }
 
-  render(withCache = false) {
-    if (withCache) {
-      return cache[location.pathname] || this.content;
-    }
+  async fetchData() {}
 
-    return this.content;
+  async render(withCache = false) {
+    const cacheData = this.cache[location.pathname];
+
+    if (withCache && cacheData) {
+      this.rootElement.innerHTML = cacheData;
+    } else {
+      this.rootElement.innerHTML = this.renderContent;
+
+      await this.fetchData();
+    }
   }
 
   caching() {
-    const rootElement = document.querySelector("#root");
-
-    cache[location.pathname] = rootElement.innerHTML;
+    this.cache[location.pathname] = this.rootElement.innerHTML;
   }
 }

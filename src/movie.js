@@ -36,6 +36,7 @@ export const drawMovieList = movieList => {
 };
 
 export const loadMovie = async () => {
+  console.log("load");
   const movieList = await fetchMovie("movie/popular");
 
   drawMovieList(movieList);

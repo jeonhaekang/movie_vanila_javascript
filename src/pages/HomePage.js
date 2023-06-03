@@ -8,16 +8,16 @@ export class HomePage extends Page {
         <ul class="movie-list"></ul>
       </main>
     `);
-  }
 
-  init() {
     const searchForm = document.querySelector(".search-form");
     searchForm.addEventListener("submit", event => {
       event.preventDefault();
 
       searchMovie();
     });
+  }
 
+  fetchData() {
     loadMovie();
   }
 }
