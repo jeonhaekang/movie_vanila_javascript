@@ -16,7 +16,7 @@ export class HomePage extends Page {
     `);
   }
 
-  renderMovieList = movieList => {
+  renderMovieList(movieList) {
     const movieListElement = document.querySelector(".movie-list");
 
     movieListElement.innerHTML = movieList.reduce((newMovieList, movieItem) => {
@@ -31,7 +31,7 @@ export class HomePage extends Page {
             </li>
           `);
     }, "");
-  };
+  }
 
   async onRender() {
     const popularMovieList = await getPopularMovieList();
