@@ -1,3 +1,4 @@
+import { navigate } from "./routes.js";
 import { toQueryString } from "./utils/index.js";
 
 export const fetchMovie = async (restUrl, params = {}) => {
@@ -28,6 +29,10 @@ export const drawMovieList = movieList => {
           </li>
         `);
   }, "");
+
+  document.querySelectorAll(".movie-item").forEach(movieItem => {
+    movieItem.addEventListener("click", () => navigate("/detail"));
+  });
 };
 
 export const loadMovie = async () => {
