@@ -5,9 +5,7 @@ import { Page } from "./Page.js";
 export class HomePage extends Page {
   constructor() {
     super(`
-      <main>
         <ul class="movie-list"></ul>
-      </main>
     `);
   }
 
@@ -44,6 +42,8 @@ export class HomePage extends Page {
       const searchMovieList = await getSearchMovieList(searchKeyword);
 
       if (searchMovieList.length > 0) {
+        navigate("/", true);
+
         this.renderMovieList(searchMovieList);
       } else {
         alert("검색된 결과가 없습니다.");
