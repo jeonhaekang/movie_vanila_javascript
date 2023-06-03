@@ -7,7 +7,9 @@ export class Page {
     window.addEventListener("history", this.caching.bind(this));
   }
 
-  async fetchData() {}
+  async onFinally() {}
+
+  async onRender() {}
 
   async render(withCache = false) {
     const cacheData = this.cache[location.pathname];
@@ -17,8 +19,10 @@ export class Page {
     } else {
       this.rootElement.innerHTML = this.renderContent;
 
-      await this.fetchData();
+      await this.onRender();
     }
+
+    await this.onFinally();
   }
 
   caching() {

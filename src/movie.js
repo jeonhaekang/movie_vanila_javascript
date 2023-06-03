@@ -1,4 +1,3 @@
-import { navigate } from "./routes.js";
 import { toQueryString } from "./utils/index.js";
 
 export const fetchMovie = async (restUrl, params = {}) => {
@@ -18,10 +17,10 @@ export const drawMovieList = movieList => {
   const movieListElement = document.querySelector(".movie-list");
 
   movieListElement.innerHTML = movieList.reduce((newMovieList, movieItem) => {
-    const { poster_path, title, overview, vote_average } = movieItem;
+    const { id, poster_path, title, overview, vote_average } = movieItem;
 
     return (newMovieList += `
-          <li class="movie-item">
+          <li id="${id}" class="movie-item">
               <img class="movie-poster" src="https://image.tmdb.org/t/p/w500/${poster_path}" alt="${title} 포스터" />
               <h2 class="movie-title">${title}</h2>
               <p class="movie-desc">${overview}</p>
@@ -29,14 +28,9 @@ export const drawMovieList = movieList => {
           </li>
         `);
   }, "");
-
-  document.querySelectorAll(".movie-item").forEach(movieItem => {
-    movieItem.addEventListener("click", () => navigate("/detail"));
-  });
 };
 
 export const loadMovie = async () => {
-  console.log("load");
   const movieList = await fetchMovie("movie/popular");
 
   drawMovieList(movieList);

@@ -6,24 +6,24 @@ export const routes = {
   "/detail": new DetailPage()
 };
 
-export const renderPage = async (pathname, withCache) => {
+export const renderPage = async (pathname, cache) => {
   const page = routes[pathname];
-  page.render(withCache);
+  page.render(cache);
 };
 
-export const navigate = (to, withCache = false) => {
+export const navigate = (to, cache) => {
   const historyChangeEvent = new CustomEvent("history", {
-    detail: { to, withCache }
+    detail: { to, cache }
   });
 
   dispatchEvent(historyChangeEvent);
 };
 
 export const routeInit = () => {
-  window.addEventListener("history", ({ detail: { to } }) => {
+  window.addEventListener("history", ({ detail: { to, cache } }) => {
     history.pushState(null, "", to);
 
-    renderPage(to);
+    renderPage(to.split("?")[0], cache);
   });
 
   window.addEventListener("popstate", () => {
