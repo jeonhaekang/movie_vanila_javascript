@@ -1,3 +1,4 @@
+import { getDetailMovie } from "../apis/movie.js";
 import { Page } from "./Page.js";
 
 export class DetailPage extends Page {
@@ -9,7 +10,11 @@ export class DetailPage extends Page {
       `);
   }
 
-  init() {
-    console.log("init");
+  onFinally() {
+    const params = new URLSearchParams(location.search);
+
+    const movieId = params.get("id");
+
+    getDetailMovie(movieId);
   }
 }
