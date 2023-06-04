@@ -4,7 +4,7 @@ export class Page {
     this.cache = cache;
     this.rootElement = document.querySelector("#root");
 
-    window.addEventListener("history", this.caching.bind(this));
+    window.addEventListener("history", () => this.caching());
   }
 
   async onFinally() {}

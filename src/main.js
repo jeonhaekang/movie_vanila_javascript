@@ -1,6 +1,6 @@
-import { navigate, routeInit } from "./routes.js";
+import { connectRoute, navigate } from "./routes.js";
 
-routeInit();
+connectRoute();
 
 const mainLogo = document.querySelector(".main-logo");
 mainLogo.addEventListener("click", () => navigate("/"));

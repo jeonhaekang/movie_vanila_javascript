@@ -11,17 +11,23 @@ export const renderPage = async (pathname, cache) => {
   page.render(cache);
 };
 
-export const navigate = (to, cache) => {
+export const navigate = (to, { cache, replace } = {}) => {
   const historyChangeEvent = new CustomEvent("history", {
-    detail: { to, cache }
+    detail: { to, options: { cache, replace } }
   });
 
   dispatchEvent(historyChangeEvent);
 };
 
-export const routeInit = () => {
-  window.addEventListener("history", ({ detail: { to, cache } }) => {
-    history.pushState(null, "", to);
+export const connectRoute = () => {
+  window.addEventListener("history", ({ detail: { to, options } }) => {
+    const { cache, replace } = options;
+
+    if (to === location.pathname) {
+      history.replaceState(null, "", to);
+    } else {
+      history.pushState(null, "", to);
+    }
 
     renderPage(to.split("?")[0], cache);
   });
