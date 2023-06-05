@@ -4,7 +4,7 @@ import { Page } from "./Page.js";
 
 export class HomePage extends Page {
   constructor() {
-    super(/*html*/ `
+    super(`
         <form class="search-form">
           <input class="search-box" />
           <button>검색</button>
@@ -22,7 +22,7 @@ export class HomePage extends Page {
     movieListElement.innerHTML = movieList.reduce((newMovieList, movieItem) => {
       const { id, poster_path, title, overview, vote_average } = movieItem;
 
-      return (newMovieList += /*html*/ `
+      return (newMovieList += `
             <li id="${id}" class="movie-item">
                 <img class="movie-poster" src="https://image.tmdb.org/t/p/w500/${poster_path}" alt="${title} 포스터" />
                 <h2 class="movie-title">${title}</h2>
@@ -57,11 +57,9 @@ export class HomePage extends Page {
 
     const movieList = document.querySelector(".movie-list");
     movieList.addEventListener("click", ({ target }) => {
-      if (target === movieList) return;
+      const movieItem = target.closest("li");
 
-      const _id = target.matches(".movie-item") ? target.id : target.parentNode.id;
-
-      navigate(`/detail?movieId=${_id}`);
+      movieItem && navigate(`/detail?movieId=${movieItem.id}`);
     });
   }
 }
