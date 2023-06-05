@@ -17,7 +17,7 @@ export class DetailPage extends Page {
     const movieId = params.get("movieId");
     const movieInfo = await getDetailMovie(movieId);
 
-    const { poster_path } = movieInfo;
+    const { poster_path, title } = movieInfo;
 
     const detailInfo = document.querySelector(".detail");
     detailInfo.innerHTML = `
@@ -25,6 +25,10 @@ export class DetailPage extends Page {
         <figure style="background-image: url(${IMAGE_BASE_URL}/${poster_path})">
           <img src="${IMAGE_BASE_URL}/${poster_path}"/>
         </figure>        
+      </div>
+
+      <div class="detail-info">
+        <h2>${title}</h2>
       </div>
     `;
   }
