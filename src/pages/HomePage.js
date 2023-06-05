@@ -24,7 +24,10 @@ export class HomePage extends Page {
 
       return (newMovieList += `
             <li id="${id}" class="movie-item">
-                <img class="movie-poster" src="https://image.tmdb.org/t/p/w500/${poster_path}" alt="${title} 포스터" />
+                <figure class="movie-poster-box">
+                  <img class="movie-poster" src="https://image.tmdb.org/t/p/w500/${poster_path}" alt="${title} 포스터" />
+                </figure>
+                
                 <h2 class="movie-title">${title}</h2>
                 <p class="movie-desc">${overview}</p>
                 <p class="movie-rating">Rating : ${vote_average}</p>
