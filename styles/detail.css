@@ -2,7 +2,7 @@
   max-width: 1200px;
 
   margin: 0 auto;
-  padding: 0 40px;
+  padding: 0 20px;
 }
 
 .detail-poster {
@@ -53,4 +53,50 @@
 .detail-title {
   font-size: 26px;
   font-weight: 700;
+}
+
+.detail-etc-box {
+  margin-top: 6px;
+
+  font-size: 15px;
+  color: #777777;
+}
+
+.detail-etc-box span + span::before {
+  content: "";
+  display: inline-block;
+
+  width: 1px;
+  height: 12px;
+
+  margin: 0 10px;
+
+  background-color: #dddddd;
+}
+
+.detail-desc-box {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+
+  margin-top: 24px;
+  padding: 12px 0;
+
+  border-top: 1px solid #eeeeee;
+}
+
+.detail-desc {
+  display: grid;
+  grid-template-columns: 40px 1fr;
+
+  font-size: 15px;
+  line-height: 22px;
+}
+
+.detail-desc dt {
+  font-weight: 500;
+}
+
+.detail-desc dd {
+  color: #777;
 }
