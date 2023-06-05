@@ -11,50 +11,48 @@ export class DetailPage extends Page {
     `);
   }
 
-  async onFinally() {
-    const params = new URLSearchParams(location.search);
+  renderDescItem(title, desc) {
+    return `
+      <dl class="detail-desc">
+        <dt>${title}</dt>
+        <dd>${desc}</dd>
+      </dl>
+    `;
+  }
 
-    const movieId = params.get("movieId");
-    const movieInfo = await getDetailMovie(movieId);
-
+  async renderDetail(movieId) {
     const { poster_path, title, vote_average, release_date, runtime, overview, tagline } =
-      movieInfo;
-
-    console.log(movieInfo);
+      await getDetailMovie(movieId);
 
     const detailInfo = document.querySelector(".detail");
     detailInfo.innerHTML = `
       <div class="detail-poster">
         <figure style="background-image: url(${IMAGE_BASE_URL}/${poster_path})">
           <img src="${IMAGE_BASE_URL}/${poster_path}"/>
-        </figure>        
+        </figure>
       </div>
 
       <div class="detail-info">
         <h2 class="detail-title">${title}</h2>
 
-        <div class="detail-rating">
-        </div>
-
         <div class="detail-etc-box">
-          <span class="detail-score">평점 ${vote_average}</span>
-          
-          <span class="detail-release-date">개봉일 ${release_date}</span>
-
-          <span class="detail-runtime">상영시간 ${runtime}분</span>
+          <span>평점 ${vote_average}</span>
+          <span>개봉일 ${release_date}</span>
+          <span>상영시간 ${runtime}분</span>
         </div>
 
         <div class="detail-desc-box">
-          <dl class="detail-desc">
-            <dt>요약</dt>
-            <dd>${tagline}</dd>
-          </dl>
-          <dl class="detail-desc">
-            <dt>소개</dt>
-            <dd>${overview}</dd>
-          </dl>
+          ${this.renderDescItem("소개", overview)}
+          ${tagline && this.renderDescItem("요약", tagline)}
         </div>
       </div>
-    `;
+  `;
+  }
+
+  async onRender() {
+    const params = new URLSearchParams(location.search);
+    const movieId = params.get("movieId");
+
+    this.renderDetail(movieId);
   }
 }
