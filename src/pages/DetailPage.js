@@ -1,5 +1,5 @@
-import { getDetailMovie } from "../apis/movie.js";
-import { IMAGE_BASE_URL } from "../constants.js";
+import { getDetailMovie, getSimilarMovie } from "../apis/movie.js";
+import { IMAGE_BASE_URL, IMAGE_SIZE } from "../constants.js";
 import { Page } from "./Page.js";
 
 export class DetailPage extends Page {
@@ -9,6 +9,9 @@ export class DetailPage extends Page {
         <main class="detail"></main>
       </div>
     `);
+
+    const params = new URLSearchParams(location.search);
+    this.movieId = params.get("movieId");
   }
 
   renderDescItem(title, desc) {
@@ -20,15 +23,16 @@ export class DetailPage extends Page {
     `;
   }
 
-  async renderDetail(movieId) {
-    const { poster_path, title, vote_average, release_date, runtime, overview, tagline } =
-      await getDetailMovie(movieId);
+  async renderMovieDetail(movieId) {
+    const { poster_path, title, vote_average, release_date, runtime, overview, tagline } = await getDetailMovie(
+      movieId
+    );
 
     const detailInfo = document.querySelector(".detail");
     detailInfo.innerHTML = `
       <div class="detail-poster">
-        <figure style="background-image: url(${IMAGE_BASE_URL}/${poster_path})">
-          <img src="${IMAGE_BASE_URL}/${poster_path}"/>
+        <figure style="background-image: url(${IMAGE_BASE_URL}/${IMAGE_SIZE.backdrop.large}/${poster_path})">
+          <img src="${IMAGE_BASE_URL}/${IMAGE_SIZE.poster.medium}/${poster_path}"/>
         </figure>
       </div>
 
@@ -49,10 +53,17 @@ export class DetailPage extends Page {
   `;
   }
 
+  async renderSimilarMovie(movieId) {
+    const similarMovieList = await getSimilarMovie(movieId);
+
+    console.log(similarMovieList);
+  }
+
   async onRender() {
     const params = new URLSearchParams(location.search);
     const movieId = params.get("movieId");
 
-    this.renderDetail(movieId);
+    this.renderMovieDetail(movieId);
+    this.renderSimilarMovie(movieId);
   }
 }
