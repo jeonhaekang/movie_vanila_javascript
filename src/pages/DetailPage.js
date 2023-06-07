@@ -1,4 +1,4 @@
-import { getDetailMovie, getSimilarMovie } from "../apis/movie.js";
+import { getMovieDetail, getMoviePhotoList } from "../apis/movie.js";
 import { IMAGE_BASE_URL, IMAGE_SIZE } from "../constants.js";
 import { Page } from "./Page.js";
 
@@ -6,7 +6,10 @@ export class DetailPage extends Page {
   constructor() {
     super(`
       <div class="detail-container">
-        <main class="detail"></main>
+        <main class="detail-section"></main>
+
+        <section class="photo-section">
+        </section>
       </div>
     `);
 
@@ -16,19 +19,19 @@ export class DetailPage extends Page {
 
   renderDescItem(title, desc) {
     return `
-      <dl class="detail-desc">
-        <dt>${title}</dt>
-        <dd>${desc}</dd>
+      <dl class="desc-item small">
+        <dt class="normal">${title}</dt>
+        <dd class="gray">${desc}</dd>
       </dl>
     `;
   }
 
   async renderMovieDetail(movieId) {
-    const { poster_path, title, vote_average, release_date, runtime, overview, tagline } = await getDetailMovie(
+    const { poster_path, title, vote_average, release_date, runtime, overview, tagline } = await getMovieDetail(
       movieId
     );
 
-    const detailInfo = document.querySelector(".detail");
+    const detailInfo = document.querySelector(".detail-section");
     detailInfo.innerHTML = `
       <div class="detail-poster">
         <figure style="background-image: url(${IMAGE_BASE_URL}/${IMAGE_SIZE.backdrop.large}/${poster_path})">
@@ -37,15 +40,15 @@ export class DetailPage extends Page {
       </div>
 
       <div class="detail-info">
-        <h2 class="detail-title">${title}</h2>
+        <h2 class="large bold">${title}</h2>
 
-        <div class="detail-etc-box">
+        <div class="etc-box small gray">
           <span>평점 ${vote_average}</span>
           <span>개봉일 ${release_date}</span>
           <span>상영시간 ${runtime}분</span>
         </div>
 
-        <div class="detail-desc-box">
+        <div class="desc-box">
           ${this.renderDescItem("소개", overview)}
           ${tagline && this.renderDescItem("요약", tagline)}
         </div>
@@ -53,10 +56,25 @@ export class DetailPage extends Page {
   `;
   }
 
-  async renderSimilarMovie(movieId) {
-    const similarMovieList = await getSimilarMovie(movieId);
+  async renderMoviePhotoList(movieId) {
+    const photoList = await getMoviePhotoList(movieId);
 
-    console.log(similarMovieList);
+    const imageSection = document.querySelector(".photo-section");
+    imageSection.innerHTML = `
+      <h3>포토 ${photoList.length}</h3>
+
+      <ul class="photo-list">
+        ${photoList.reduce((_photoList, { file_path }) => {
+          const newPhoto = `
+            <li class="photo-item">
+              <img src="${IMAGE_BASE_URL}/${IMAGE_SIZE.backdrop.small}/${file_path}"/>
+            </li>
+          `;
+
+          return _photoList + newPhoto;
+        }, "")}
+      </ul>
+    `;
   }
 
   async onRender() {
@@ -64,6 +82,6 @@ export class DetailPage extends Page {
     const movieId = params.get("movieId");
 
     this.renderMovieDetail(movieId);
-    this.renderSimilarMovie(movieId);
+    this.renderMoviePhotoList(movieId);
   }
 }

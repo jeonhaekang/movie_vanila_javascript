@@ -1,0 +1,32 @@
+.xlarge {
+  font-size: 36px;
+  line-height: 48px;
+}
+
+.large {
+  font-size: 24px;
+  line-height: 32px;
+}
+
+.medium {
+  font-size: 20px;
+  line-height: 28px;
+}
+
+.small {
+  font-size: 16px;
+  line-height: 24px;
+}
+
+.tiny {
+  font-size: 13px;
+  line-height: 20px;
+}
+
+.normal {
+  font-weight: 500;
+}
+
+.bold {
+  font-weight: 700;
+}

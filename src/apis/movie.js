@@ -25,14 +25,14 @@ export const getSearchMovieList = async query => {
   return searchMovieList;
 };
 
-export const getDetailMovie = async movieId => {
+export const getMovieDetail = async movieId => {
   const response = await fetchMovie(`movie/${movieId}`);
 
   return response;
 };
 
-export const getSimilarMovie = async movieId => {
-  const { results: similarMovieList } = await fetchMovie(`movie/${movieId}/similar`);
+export const getMoviePhotoList = async movieId => {
+  const { backdrops: moviePhotoList } = await fetchMovie(`movie/${movieId}/images`);
 
-  return similarMovieList;
+  return moviePhotoList;
 };
