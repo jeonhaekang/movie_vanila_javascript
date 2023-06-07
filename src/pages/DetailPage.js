@@ -63,19 +63,29 @@ export class DetailPage extends Page {
     const photoSectionContent = `
       <h3 class="medium bold">포토 <span class="green">${photoList.length}</span></h3>
 
-      <ul class="photo-list">
-        ${photoList.reduce((_photoList, { file_path }) => {
-          const newPhoto = `
-            <li class="photo-item">
-              <figure class="photo-box">
-                <img src="${IMAGE_BASE_URL}/${IMAGE_SIZE.backdrop.small}/${file_path}" data-path="${file_path}"/>
-              </figure>
-            </li>
-          `;
+      <div class="photo-list-box">
+        <button class="list-button prev-button">
+          <img src="assets/icons/chevron_left.svg"/>
+        </button>
 
-          return _photoList + newPhoto;
-        }, "")}
-      </ul>
+        <ul class="photo-list">
+          ${photoList.reduce((_photoList, { file_path }) => {
+            const newPhoto = `
+              <li class="photo-item">
+                <figure class="photo-box">
+                  <img src="${IMAGE_BASE_URL}/${IMAGE_SIZE.backdrop.small}/${file_path}" data-path="${file_path}"/>
+                </figure>
+              </li>
+            `;
+
+            return _photoList + newPhoto;
+          }, "")}
+        </ul>
+        
+        <button class="list-button next-button">
+          <img src="assets/icons/chevron_right.svg"/>
+        </button>
+      </div>
     `;
     photoSection.insertAdjacentHTML("afterbegin", photoSectionContent);
   }
@@ -107,5 +117,8 @@ export class DetailPage extends Page {
 
       photoItem && this.renderPhotoPreview(photoItem.dataset.path);
     });
+
+    const prevButton = document.querySelector(".prev-button");
+    const nextButton = document.querySelector(".next-button");
   }
 }
