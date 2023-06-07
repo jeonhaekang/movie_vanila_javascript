@@ -42,7 +42,7 @@ export class DetailPage extends Page {
       <div class="detail-info">
         <h2 class="large bold">${title}</h2>
 
-        <div class="etc-box small gray">
+        <div class="etc-box tiny gray">
           <span>평점 ${vote_average}</span>
           <span>개봉일 ${release_date}</span>
           <span>상영시간 ${runtime}분</span>
@@ -61,13 +61,15 @@ export class DetailPage extends Page {
 
     const imageSection = document.querySelector(".photo-section");
     imageSection.innerHTML = `
-      <h3>포토 ${photoList.length}</h3>
+      <h3 class="medium bold">포토 <span class="green">${photoList.length}</span></h3>
 
       <ul class="photo-list">
         ${photoList.reduce((_photoList, { file_path }) => {
           const newPhoto = `
             <li class="photo-item">
-              <img src="${IMAGE_BASE_URL}/${IMAGE_SIZE.backdrop.small}/${file_path}"/>
+              <figure class="photo-box">
+                <img src="${IMAGE_BASE_URL}/${IMAGE_SIZE.backdrop.small}/${file_path}"/>
+              </figure>
             </li>
           `;
 

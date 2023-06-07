@@ -1,7 +1,14 @@
+:root {
+  --gray1-color: #777777;
+  --gray2-color: #dddddd;
+  --gray3-color: #eeeeee;
+  --green-color: #04ce66;
+}
+
 .gray {
-  color: #777777;
+  color: var(--gray1-color);
 }
 
 .green {
-  color: #04ce66;
+  color: var(--green-color);
 }

@@ -59,7 +59,7 @@
 
   margin: 0 10px;
 
-  background-color: #dddddd;
+  background-color: var(--gray2-color);
 }
 
 .desc-box {
@@ -70,7 +70,8 @@
   margin-top: 24px;
   padding: 12px 0;
 
-  border-top: 1px solid #eeeeee;
+  border-top: 1px solid var(--gray3-color);
+  border-bottom: 1px solid var(--gray3-color);
 }
 
 .desc-item {
@@ -79,10 +80,65 @@
 }
 
 .photo-section {
+  margin-top: 32px;
 }
 
 .photo-list {
+  display: flex;
+  gap: 4px;
+
+  margin-top: 16px;
+
+  overflow-x: scroll;
 }
 
 .photo-item {
+  flex-shrink: 0;
+
+  width: calc((100% - 12px) / 4);
+}
+
+@media (min-width: 600px) {
+  .photo-item {
+    width: calc((100% - 16px) / 5);
+  }
+}
+
+@media (min-width: 800px) {
+  .photo-item {
+    width: calc((100% - 20px) / 6);
+  }
+}
+
+@media (min-width: 1000px) {
+  .photo-item {
+    width: calc((100% - 24px) / 7);
+  }
+}
+
+.photo-box {
+  position: relative;
+
+  width: 100%;
+  height: 0;
+  overflow: hidden;
+
+  border-radius: 4px;
+
+  padding-bottom: 100%;
+}
+
+.photo-item img {
+  position: absolute;
+
+  width: 100%;
+  height: 100%;
+
+  object-fit: cover;
+
+  transition: 300ms;
+}
+
+.photo-item img:hover {
+  transform: scale(1.1);
 }
