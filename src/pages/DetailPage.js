@@ -7,7 +7,9 @@ export class DetailPage extends Page {
     super(`
         <main class="detail-section"></main>
 
-        <section class="photo-section"></section>
+        <section class="photo-section">
+          <div class="photo-preview"></div>
+        </section>
     `);
 
     const params = new URLSearchParams(location.search);
@@ -28,36 +30,37 @@ export class DetailPage extends Page {
       movieId
     );
 
-    const detailInfo = document.querySelector(".detail-section");
-    detailInfo.innerHTML = `
-      <div class="detail-poster">
-        <figure style="background-image: url(${IMAGE_BASE_URL}/${IMAGE_SIZE.backdrop.large}/${poster_path})">
-          <img src="${IMAGE_BASE_URL}/${IMAGE_SIZE.poster.medium}/${poster_path}"/>
-        </figure>
-      </div>
-
-      <div class="detail-info">
-        <h2 class="large bold">${title}</h2>
-
-        <div class="etc-box tiny gray">
-          <span>평점 ${vote_average}</span>
-          <span>개봉일 ${release_date}</span>
-          <span>상영시간 ${runtime}분</span>
+    const detailSection = document.querySelector(".detail-section");
+    const detailSectionContent = `
+        <div class="detail-poster">
+          <figure style="background-image: url(${IMAGE_BASE_URL}/${IMAGE_SIZE.backdrop.large}/${poster_path})">
+            <img src="${IMAGE_BASE_URL}/${IMAGE_SIZE.poster.medium}/${poster_path}"/>
+          </figure>
         </div>
 
-        <div class="desc-box">
-          ${this.renderDescItem("소개", overview)}
-          ${tagline && this.renderDescItem("요약", tagline)}
+        <div class="detail-info">
+          <h2 class="large bold">${title}</h2>
+
+          <div class="etc-box tiny gray">
+            <span>평점 ${vote_average}</span>
+            <span>개봉일 ${release_date}</span>
+            <span>상영시간 ${runtime}분</span>
+          </div>
+
+          <div class="desc-box">
+            ${this.renderDescItem("소개", overview)}
+            ${tagline && this.renderDescItem("요약", tagline)}
+          </div>
         </div>
-      </div>
-  `;
+    `;
+    detailSection.insertAdjacentHTML("afterbegin", detailSectionContent);
   }
 
-  async renderMoviePhotoList(movieId) {
+  async renderPhotoList(movieId) {
     const photoList = await getMoviePhotoList(movieId);
 
-    const imageSection = document.querySelector(".photo-section");
-    imageSection.innerHTML = `
+    const photoSection = document.querySelector(".photo-section");
+    const photoSectionContent = `
       <h3 class="medium bold">포토 <span class="green">${photoList.length}</span></h3>
 
       <ul class="photo-list">
@@ -65,7 +68,7 @@ export class DetailPage extends Page {
           const newPhoto = `
             <li class="photo-item">
               <figure class="photo-box">
-                <img src="${IMAGE_BASE_URL}/${IMAGE_SIZE.backdrop.small}/${file_path}"/>
+                <img src="${IMAGE_BASE_URL}/${IMAGE_SIZE.backdrop.small}/${file_path}" data-path="${file_path}"/>
               </figure>
             </li>
           `;
@@ -74,6 +77,19 @@ export class DetailPage extends Page {
         }, "")}
       </ul>
     `;
+    photoSection.insertAdjacentHTML("afterbegin", photoSectionContent);
+  }
+
+  async renderPhotoPreview(filePath) {
+    const photoPreview = document.querySelector(".photo-preview");
+
+    const photoPreviewContent = `
+      <figure class="photo-preview-box">
+        <img src="${IMAGE_BASE_URL}/${IMAGE_SIZE.backdrop.large}/${filePath}"/>
+      </figure>
+    `;
+
+    photoPreview.innerHTML = photoPreviewContent;
   }
 
   async onRender() {
@@ -81,6 +97,15 @@ export class DetailPage extends Page {
     const movieId = params.get("movieId");
 
     this.renderMovieDetail(movieId);
-    this.renderMoviePhotoList(movieId);
+    await this.renderPhotoList(movieId);
+  }
+
+  async onFinally() {
+    const photoList = document.querySelector(".photo-list");
+    photoList.addEventListener("click", ({ target }) => {
+      const photoItem = target.closest("img");
+
+      photoItem && this.renderPhotoPreview(photoItem.dataset.path);
+    });
   }
 }
