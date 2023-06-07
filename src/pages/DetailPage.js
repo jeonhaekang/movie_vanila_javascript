@@ -5,12 +5,9 @@ import { Page } from "./Page.js";
 export class DetailPage extends Page {
   constructor() {
     super(`
-      <div class="detail-container">
         <main class="detail-section"></main>
 
-        <section class="photo-section">
-        </section>
-      </div>
+        <section class="photo-section"></section>
     `);
 
     const params = new URLSearchParams(location.search);
