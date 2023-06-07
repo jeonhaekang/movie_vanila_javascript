@@ -28,9 +28,9 @@ export class HomePage extends Page {
                   <img class="movie-poster" src="https://image.tmdb.org/t/p/w500/${poster_path}" alt="${title} 포스터" />
                 </figure>
                 
-                <h2 class="movie-title">${title}</h2>
-                <p class="movie-desc">${overview}</p>
-                <p class="movie-rating">Rating : ${vote_average}</p>
+                <h2 class="movie-title small bold">${title}</h2>
+                <p class="movie-desc tiny">${overview}</p>
+                <p class="movie-rating tiny">평점 : ${vote_average}</p>
             </li>
           `);
     }, "");
