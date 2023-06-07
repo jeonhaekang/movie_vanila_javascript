@@ -78,19 +78,22 @@
 
 .photo-list-box {
   position: relative;
+
+  margin-top: 16px;
+}
+
+.photo-display {
+  overflow: hidden;
 }
 
 .photo-list {
   display: flex;
   gap: 4px;
 
-  margin-top: 16px;
+  width: 100%;
+  height: 100%;
 
-  overflow-x: scroll;
-}
-
-.photo-list::-webkit-scrollbar {
-  display: none;
+  transition: 300ms;
 }
 
 .photo-item {

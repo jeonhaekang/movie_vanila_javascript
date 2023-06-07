@@ -7,9 +7,9 @@ export class Page {
     window.addEventListener("history", () => this.caching());
   }
 
-  async onFinally() {}
-
   async onRender() {}
+
+  async onFinally() {}
 
   async render(withCache = false) {
     const cacheData = this.cache[location.pathname];

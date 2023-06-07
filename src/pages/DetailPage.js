@@ -1,5 +1,7 @@
 import { getMovieDetail, getMoviePhotoList } from "../apis/movie.js";
 import { IMAGE_BASE_URL, IMAGE_SIZE } from "../constants.js";
+import { Pagination } from "../models/Pagination.js";
+import { StyleHelper } from "../models/StyleHelper.js";
 import { Page } from "./Page.js";
 
 export class DetailPage extends Page {
@@ -11,9 +13,6 @@ export class DetailPage extends Page {
           <div class="photo-preview"></div>
         </section>
     `);
-
-    const params = new URLSearchParams(location.search);
-    this.movieId = params.get("movieId");
   }
 
   renderDescItem(title, desc) {
@@ -64,25 +63,27 @@ export class DetailPage extends Page {
       <h3 class="medium bold">포토 <span class="green">${photoList.length}</span></h3>
 
       <div class="photo-list-box">
-        <button class="list-button prev-button">
+        <button class="list-button prev-button" data-action="prevPage">
           <img src="assets/icons/chevron_left.svg"/>
         </button>
-
-        <ul class="photo-list">
-          ${photoList.reduce((_photoList, { file_path }) => {
-            const newPhoto = `
-              <li class="photo-item">
-                <figure class="photo-box">
-                  <img src="${IMAGE_BASE_URL}/${IMAGE_SIZE.backdrop.small}/${file_path}" data-path="${file_path}"/>
-                </figure>
-              </li>
-            `;
-
-            return _photoList + newPhoto;
-          }, "")}
-        </ul>
         
-        <button class="list-button next-button">
+        <div class="photo-display">
+          <ul class="photo-list">
+            ${photoList.reduce((_photoList, { file_path }) => {
+              const newPhoto = `
+                <li class="photo-item">
+                  <figure class="photo-box">
+                    <img src="${IMAGE_BASE_URL}/${IMAGE_SIZE.backdrop.small}/${file_path}" data-path="${file_path}"/>
+                  </figure>
+                </li>
+              `;
+
+              return _photoList + newPhoto;
+            }, "")}
+          </ul>
+        </div>
+      
+        <button class="list-button next-button" data-action="nextPage">
           <img src="assets/icons/chevron_right.svg"/>
         </button>
       </div>
@@ -118,7 +119,25 @@ export class DetailPage extends Page {
       photoItem && this.renderPhotoPreview(photoItem.dataset.path);
     });
 
+    const photoPage = new Pagination(photoList.childElementCount, 8);
+    const styleHelper = new StyleHelper();
+
     const prevButton = document.querySelector(".prev-button");
     const nextButton = document.querySelector(".next-button");
+
+    const setButtonDisplay = () => {
+      styleHelper.toggle(prevButton, "display", "none", photoPage.isFirstPage());
+      styleHelper.toggle(nextButton, "display", "none", photoPage.isLastPage());
+    };
+
+    [prevButton, nextButton].forEach(button => {
+      button.addEventListener("click", () => {
+        photoPage[button.dataset.action]();
+        photoList.style.transform = `translateX(${photoPage.currentPage * -(photoList.clientWidth + 4)}px)`;
+        setButtonDisplay();
+      });
+    });
+
+    setButtonDisplay();
   }
 }
