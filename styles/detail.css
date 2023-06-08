@@ -194,3 +194,69 @@
 .next-button {
   right: -20px;
 }
+
+.comment-section {
+  margin-top: 30px;
+}
+
+.comment-form {
+  border: 1px solid var(--gray2-color);
+
+  padding: 16px;
+}
+
+.comment-form input {
+  height: 36px;
+
+  border: none;
+  border-bottom: 1px solid var(--gray2-color);
+
+  outline: none;
+}
+
+.comment-user-box {
+  display: flex;
+  gap: 12px;
+}
+
+.comment-submit-box {
+  display: flex;
+  gap: 12px;
+
+  margin-top: 12px;
+}
+
+.comment-content {
+  flex: 1;
+}
+
+.comment-submit {
+  width: 60px;
+
+  background-color: var(--green-color);
+
+  border: none;
+
+  color: #ffffff;
+
+  cursor: pointer;
+}
+
+.comment-list {
+  margin-top: 30px;
+}
+
+.comment-item {
+  padding: 12px 0;
+}
+
+.comment-item + .comment-item {
+  border-top: 1px solid var(--gray2-color);
+}
+
+.comment-delete {
+  padding: 0;
+  border: none;
+
+  background-color: transparent;
+}
