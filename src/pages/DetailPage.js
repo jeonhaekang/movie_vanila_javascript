@@ -81,7 +81,7 @@ export class DetailPage extends Page {
       <h3 class="medium bold">포토 <span class="green">${photoList.length}</span></h3>
 
       <div class="photo-list-box">
-        <button class="list-button prev-button" data-action="prevPage">
+        <button class="list-button prev-button">
           <img src="assets/icons/chevron_left.svg"/>
         </button>
         
@@ -101,7 +101,7 @@ export class DetailPage extends Page {
           </ul>
         </div>
       
-        <button class="list-button next-button" data-action="nextPage">
+        <button class="list-button next-button">
           <img src="assets/icons/chevron_right.svg"/>
         </button>
       </div>
