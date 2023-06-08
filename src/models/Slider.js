@@ -33,7 +33,8 @@ export class Slider {
   }
 
   updateSlidePosition() {
-    const translatePos = this.sliderPage.currentPage * -(this.slideListElement.clientWidth + 4);
+    const gap = parseInt(getComputedStyle(this.slideListElement)["gap"]);
+    const translatePos = this.sliderPage.currentPage * -(this.slideListElement.clientWidth + gap);
 
     this.slideListElement.style.transform = `translateX(${translatePos}px)`;
     this.setButtonDisplay();
