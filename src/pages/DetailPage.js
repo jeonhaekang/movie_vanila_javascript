@@ -1,4 +1,3 @@
-import { addComment, getCommentList } from "../apis/comment.js";
 import { getMovieDetail, getMoviePhotoList } from "../apis/movie.js";
 import { IMAGE_BASE_URL, IMAGE_SIZE } from "../constants.js";
 import { Slider } from "../models/Slider.js";
@@ -13,22 +12,6 @@ export class DetailPage extends Page {
 
         <section class="photo-section">
           <div class="photo-preview"></div>
-        </section>
-
-        <section class="comment-section">
-          <form class="comment-form">
-            <div class="comment-user-box">
-              <input class="comment-name" name="name" placeholder="이름을 입력해주세요." maxlength="10" required/>
-              <input class="comment-password" type="password" name="password" placeholder="비밀번호를 입력해주세요." maxlength="4" required/>
-            </div>
-
-            <div class="comment-submit-box">
-              <input class="comment-content" name="content" placeholder="감상평을 입력해주세요." maxlength="200" required/>
-              <button class="comment-submit bold">등록</button>
-            </div>
-          </form>
-
-          <ul class="comment-list"></ul>
         </section>
     `);
   }
@@ -121,32 +104,11 @@ export class DetailPage extends Page {
     photoPreview.innerHTML = photoPreviewContent;
   }
 
-  async renderCommentList() {
-    const commentListElement = document.querySelector(".comment-list");
-
-    const commentList = getCommentList(this.movieId);
-    commentList.forEach(({ id, name, password, content }) => {
-      const _comment = `
-        <li class="comment-item">
-          <h4 class="tiny bold">${name}</h4>
-
-          <p class="small">${content}</p>
-          <button class="comment-delete tiny gray">삭제</button>
-        </li>
-      `;
-
-      commentListElement.insertAdjacentHTML("afterbegin", _comment);
-    });
-
-    console.log(commentList);
-  }
-
   async onRender() {
     const params = new URLSearchParams(location.search);
     this.movieId = params.get("movieId");
 
     this.renderMovieDetail();
-    this.renderCommentList();
     await this.renderPhotoList();
   }
 
@@ -161,28 +123,6 @@ export class DetailPage extends Page {
     const prevButton = document.querySelector(".prev-button");
     const nextButton = document.querySelector(".next-button");
     const slider = new Slider(prevButton, nextButton, photoList, 8);
-
     slider.connect();
-
-    const commentForm = document.querySelector(".comment-form");
-    commentForm.addEventListener("submit", event => {
-      event.preventDefault();
-      const inputs = document.querySelectorAll(".comment-form input");
-
-      const commentData = Array.from(inputs).reduce((data, input) => {
-        const { name, value } = input;
-
-        return { ...data, [name]: value };
-      }, {});
-
-      addComment(this.movieId, commentData);
-    });
-
-    const commentList = document.querySelector(".comment-list");
-    commentList.addEventListener("click", ({ target }) => {
-      const deleteButton = target.closest(".comment-delete");
-
-      console.log(deleteButton);
-    });
   }
 }

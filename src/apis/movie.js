@@ -16,10 +16,6 @@ export const fetchMovie = async (restUrl, params = {}) => {
 export const getPopularMovieList = async () => {
   const { results: movieList } = await fetchMovie("movie/popular");
 
-  movieList.forEach(({ title }) => {
-    console.log(title);
-  });
-
   return movieList;
 };
 
