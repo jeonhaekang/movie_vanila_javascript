@@ -1,16 +1,34 @@
+import { addComment, getCommentList } from "../apis/comment.js";
 import { getMovieDetail, getMoviePhotoList } from "../apis/movie.js";
 import { IMAGE_BASE_URL, IMAGE_SIZE } from "../constants.js";
-import { Pagination } from "../models/Pagination.js";
-import { StyleHelper } from "../models/StyleHelper.js";
+import { Slider } from "../models/Slider.js";
 import { Page } from "./Page.js";
 
 export class DetailPage extends Page {
+  movieId;
+
   constructor() {
     super(`
         <main class="detail-section"></main>
 
         <section class="photo-section">
           <div class="photo-preview"></div>
+        </section>
+
+        <section class="comment-section">
+          <form class="comment-form">
+            <div class="comment-user-box">
+              <input class="comment-name" name="name" placeholder="이름을 입력해주세요." maxlength="10" required/>
+              <input class="comment-password" type="password" name="password" placeholder="비밀번호를 입력해주세요." maxlength="4" required/>
+            </div>
+
+            <div class="comment-submit-box">
+              <input class="comment-content" name="content" placeholder="감상평을 입력해주세요." maxlength="200" required/>
+              <button class="comment-submit bold">등록</button>
+            </div>
+          </form>
+
+          <ul class="comment-list"></ul>
         </section>
     `);
   }
@@ -24,9 +42,9 @@ export class DetailPage extends Page {
     `;
   }
 
-  async renderMovieDetail(movieId) {
+  async renderMovieDetail() {
     const { poster_path, title, vote_average, release_date, runtime, overview, tagline } = await getMovieDetail(
-      movieId
+      this.movieId
     );
 
     const detailSection = document.querySelector(".detail-section");
@@ -55,8 +73,8 @@ export class DetailPage extends Page {
     detailSection.insertAdjacentHTML("afterbegin", detailSectionContent);
   }
 
-  async renderPhotoList(movieId) {
-    const photoList = await getMoviePhotoList(movieId);
+  async renderPhotoList() {
+    const photoList = await getMoviePhotoList(this.movieId);
 
     const photoSection = document.querySelector(".photo-section");
     const photoSectionContent = `
@@ -103,12 +121,33 @@ export class DetailPage extends Page {
     photoPreview.innerHTML = photoPreviewContent;
   }
 
+  async renderCommentList() {
+    const commentListElement = document.querySelector(".comment-list");
+
+    const commentList = getCommentList(this.movieId);
+    commentList.forEach(({ id, name, password, content }) => {
+      const _comment = `
+        <li class="comment-item">
+          <h4 class="tiny bold">${name}</h4>
+
+          <p class="small">${content}</p>
+          <button class="comment-delete tiny gray">삭제</button>
+        </li>
+      `;
+
+      commentListElement.insertAdjacentHTML("afterbegin", _comment);
+    });
+
+    console.log(commentList);
+  }
+
   async onRender() {
     const params = new URLSearchParams(location.search);
-    const movieId = params.get("movieId");
+    this.movieId = params.get("movieId");
 
-    this.renderMovieDetail(movieId);
-    await this.renderPhotoList(movieId);
+    this.renderMovieDetail();
+    this.renderCommentList();
+    await this.renderPhotoList();
   }
 
   async onFinally() {
@@ -119,25 +158,31 @@ export class DetailPage extends Page {
       photoItem && this.renderPhotoPreview(photoItem.dataset.path);
     });
 
-    const photoPage = new Pagination(photoList.childElementCount, 8);
-    const styleHelper = new StyleHelper();
-
     const prevButton = document.querySelector(".prev-button");
     const nextButton = document.querySelector(".next-button");
+    const slider = new Slider(prevButton, nextButton, photoList, 8);
 
-    const setButtonDisplay = () => {
-      styleHelper.toggle(prevButton, "display", "none", photoPage.isFirstPage());
-      styleHelper.toggle(nextButton, "display", "none", photoPage.isLastPage());
-    };
+    slider.connect();
 
-    [prevButton, nextButton].forEach(button => {
-      button.addEventListener("click", () => {
-        photoPage[button.dataset.action]();
-        photoList.style.transform = `translateX(${photoPage.currentPage * -(photoList.clientWidth + 4)}px)`;
-        setButtonDisplay();
-      });
+    const commentForm = document.querySelector(".comment-form");
+    commentForm.addEventListener("submit", event => {
+      event.preventDefault();
+      const inputs = document.querySelectorAll(".comment-form input");
+
+      const commentData = Array.from(inputs).reduce((data, input) => {
+        const { name, value } = input;
+
+        return { ...data, [name]: value };
+      }, {});
+
+      addComment(this.movieId, commentData);
     });
 
-    setButtonDisplay();
+    const commentList = document.querySelector(".comment-list");
+    commentList.addEventListener("click", ({ target }) => {
+      const deleteButton = target.closest(".comment-delete");
+
+      console.log(deleteButton);
+    });
   }
 }
