@@ -43,6 +43,10 @@
   margin-top: 30px;
 }
 
+.etc-box {
+  margin-top: 6px;
+}
+
 .detail-info .etc-box span + span::before {
   content: "";
   display: inline-block;
@@ -60,8 +64,8 @@
   flex-direction: column;
   gap: 8px;
 
-  margin-top: 24px;
-  padding: 12px 0;
+  margin-top: 18px;
+  padding: 18px 0;
 
   border-top: 1px solid var(--gray3-color);
   border-bottom: 1px solid var(--gray3-color);

@@ -42,9 +42,9 @@ export class DetailPage extends Page {
           <h2 class="large bold">${title}</h2>
 
           <div class="etc-box tiny gray">
-            <span>평점 ${vote_average}</span>
             <span>개봉일 ${release_date}</span>
             <span>상영시간 ${runtime}분</span>
+            <span class="red">★</span> ${vote_average.toFixed(1)}
           </div>
 
           <div class="desc-box">

@@ -30,7 +30,7 @@ export class HomePage extends Page {
                 
                 <h2 class="movie-title small bold">${title}</h2>
                 <p class="movie-desc tiny">${overview}</p>
-                <p class="movie-rating tiny">평점 : ${vote_average}</p>
+                <p class="movie-rating tiny"><span class="red">★</span> ${vote_average}</p>
             </li>
           `);
     }, "");

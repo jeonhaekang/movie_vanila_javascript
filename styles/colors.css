@@ -4,6 +4,7 @@
   --gray3-color: #eeeeee;
   --green-color: #04ce66;
   --blue-color: #0085ff;
+  --red-color: #de4444;
 }
 
 .gray {
@@ -12,4 +13,8 @@
 
 .green {
   color: var(--green-color);
+}
+
+.red {
+  color: var(--red-color);
 }
