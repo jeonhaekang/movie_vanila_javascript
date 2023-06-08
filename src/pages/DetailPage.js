@@ -117,7 +117,12 @@ export class DetailPage extends Page {
     photoList.addEventListener("click", ({ target }) => {
       const photoItem = target.closest("img");
 
-      photoItem && this.renderPhotoPreview(photoItem.dataset.path);
+      if (photoItem) {
+        this.renderPhotoPreview(photoItem.dataset.path);
+
+        const photoPreview = document.querySelector(".photo-preview");
+        photoPreview.scrollIntoView({ behavior: "smooth" });
+      }
     });
 
     const prevButton = document.querySelector(".prev-button");
