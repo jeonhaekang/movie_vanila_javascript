@@ -3,40 +3,47 @@ import { StyleHelper } from "./StyleHelper.js";
 
 export class Slider {
   constructor(prevButtonElement, nextButtonElement, slideListElement, slideItemCount) {
-    this.slideListElement = slideListElement;
-    this.prevButtonElement = prevButtonElement;
-    this.nextButtonElement = nextButtonElement;
+    this._slideListElement = slideListElement;
+    this._prevButtonElement = prevButtonElement;
+    this._nextButtonElement = nextButtonElement;
 
-    this.sliderPage = new Pagination(slideListElement.childElementCount, slideItemCount);
-    this.styleHelper = new StyleHelper();
+    this._sliderPage = new Pagination(slideListElement.childElementCount, slideItemCount);
+    this._styleHelper = new StyleHelper();
+  }
+
+  get sliderPage() {
+    return this._sliderPage;
+  }
+
+  set sliderPage(newPage) {
+    this._sliderPage = newPage;
+    this.updateSlidePosition();
+    this.setButtonDisplay();
   }
 
   connect() {
     this.setButtonDisplay();
-    this.prevButtonElement.addEventListener("click", this.prevPage.bind(this));
-    this.nextButtonElement.addEventListener("click", this.nextPage.bind(this));
+    this._prevButtonElement.addEventListener("click", this.prevPage.bind(this));
+    this._nextButtonElement.addEventListener("click", this.nextPage.bind(this));
   }
 
   setButtonDisplay() {
-    this.styleHelper.toggle(this.prevButtonElement, "display", "none", this.sliderPage.isFirstPage());
-    this.styleHelper.toggle(this.nextButtonElement, "display", "none", this.sliderPage.isLastPage());
+    this._styleHelper.toggle(this._prevButtonElement, "display", "none", this.sliderPage.isFirstPage());
+    this._styleHelper.toggle(this._nextButtonElement, "display", "none", this.sliderPage.isLastPage());
   }
 
   prevPage() {
-    this.sliderPage.prevPage();
-    this.updateSlidePosition();
+    this.sliderPage.currentPage = this.sliderPage.currentPage - 1;
   }
 
   nextPage() {
-    this.sliderPage.nextPage();
-    this.updateSlidePosition();
+    this.sliderPage.currentPage = this.sliderPage.currentPage + 1;
   }
 
   updateSlidePosition() {
-    const gap = parseInt(getComputedStyle(this.slideListElement)["gap"]);
-    const translatePos = this.sliderPage.currentPage * -(this.slideListElement.clientWidth + gap);
+    const gap = parseInt(getComputedStyle(this._slideListElement)["gap"]);
+    const translatePos = this.sliderPage.currentPage * -(this._slideListElement.clientWidth + gap);
 
-    this.slideListElement.style.transform = `translateX(${translatePos}px)`;
-    this.setButtonDisplay();
+    this._slideListElement.style.transform = `translateX(${translatePos}px)`;
   }
 }

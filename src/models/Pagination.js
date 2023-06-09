@@ -1,26 +1,32 @@
 export class Pagination {
   constructor(totalCount, pageCount) {
-    this.currentPage = 0;
-    this.maxPage = Math.ceil(totalCount / pageCount) - 1;
+    this._currentPage = 0;
+    this._maxPage = Math.ceil(totalCount / pageCount) - 1;
+  }
+
+  get currentPage() {
+    return this._currentPage;
+  }
+
+  set currentPage(page) {
+    if (page >= 0 && page <= this._maxPage) {
+      this._currentPage = page;
+    }
   }
 
   nextPage() {
-    if (this.currentPage < this.maxPage) {
-      this.currentPage += 1;
-    }
+    this.currentPage = this._currentPage + 1;
   }
 
   prevPage() {
-    if (this.currentPage > 0) {
-      this.currentPage -= 1;
-    }
+    this.currentPage = this._currentPage - 1;
   }
 
   isLastPage() {
-    return this.currentPage === this.maxPage;
+    return this._currentPage === this._maxPage;
   }
 
   isFirstPage() {
-    return this.currentPage === 0;
+    return this._currentPage === 0;
   }
 }
