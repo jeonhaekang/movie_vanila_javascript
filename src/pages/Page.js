@@ -3,29 +3,16 @@ export class Page {
     this.renderContent = content;
     this.cache = cache;
     this.rootElement = document.querySelector("#root");
-
-    window.addEventListener("history", () => this.caching());
   }
 
-  async onRender() {}
+  async before() {}
 
-  async onFinally() {}
+  async after() {}
 
-  async render(withCache = false) {
-    const cacheData = this.cache[location.pathname];
+  async render(queryString) {
+    this.rootElement.innerHTML = this.renderContent;
 
-    if (withCache && cacheData) {
-      this.rootElement.innerHTML = cacheData;
-    } else {
-      this.rootElement.innerHTML = this.renderContent;
-
-      await this.onRender();
-    }
-
-    await this.onFinally();
-  }
-
-  caching() {
-    this.cache[location.pathname] = this.rootElement.innerHTML;
+    await this.before(queryString);
+    await this.after(queryString);
   }
 }

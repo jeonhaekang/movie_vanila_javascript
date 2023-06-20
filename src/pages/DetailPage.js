@@ -104,15 +104,15 @@ export class DetailPage extends Page {
     photoPreview.innerHTML = photoPreviewContent;
   }
 
-  async onRender() {
-    const params = new URLSearchParams(location.search);
+  async before(queryString) {
+    const params = new URLSearchParams(queryString);
     this.movieId = params.get("movieId");
 
     this.renderMovieDetail();
     await this.renderPhotoList();
   }
 
-  async onFinally() {
+  async after() {
     const photoList = document.querySelector(".photo-list");
     photoList.addEventListener("click", ({ target }) => {
       const photoItem = target.closest("img");

@@ -1,5 +1,4 @@
 import { getPopularMovieList, getSearchMovieList } from "../apis/movie.js";
-import { navigate } from "../routes.js";
 import { Page } from "./Page.js";
 
 export class HomePage extends Page {
@@ -24,24 +23,24 @@ export class HomePage extends Page {
 
       return (newMovieList += `
             <li id="${id}" class="movie-item">
-                <figure class="movie-poster-box">
-                  <img class="movie-poster" src="https://image.tmdb.org/t/p/w500/${poster_path}" alt="${title} 포스터" />
-                </figure>
-                
-                <h2 class="movie-title small bold">${title}</h2>
-                <p class="movie-desc tiny">${overview}</p>
-                <p class="movie-rating tiny"><span class="red">★</span> ${vote_average}</p>
+              <figure class="movie-poster-box">
+                <img class="movie-poster" src="https://image.tmdb.org/t/p/w500/${poster_path}" alt="${title} 포스터" />
+              </figure>
+              
+              <h2 class="movie-title small bold">${title}</h2>
+              <p class="movie-desc tiny">${overview}</p>
+              <p class="movie-rating tiny"><span class="red">★</span> ${vote_average}</p>
             </li>
           `);
     }, "");
   }
 
-  async onRender() {
+  async before() {
     const popularMovieList = await getPopularMovieList();
     this.renderMovieList(popularMovieList);
   }
 
-  onFinally() {
+  async after() {
     const searchForm = document.querySelector(".search-form");
     searchForm.addEventListener("submit", async event => {
       event.preventDefault();
@@ -62,7 +61,9 @@ export class HomePage extends Page {
     movieList.addEventListener("click", ({ target }) => {
       const movieItem = target.closest("li");
 
-      movieItem && navigate(`/detail?movieId=${movieItem.id}`);
+      if (movieItem) {
+        location.hash = `#/detail?movieId=${movieItem.id}`;
+      }
     });
   }
 }

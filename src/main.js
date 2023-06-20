@@ -1,6 +1,11 @@
-import { connectRoute, navigate } from "./routes.js";
+import { renderPage } from "./routes.js";
 
-connectRoute();
+renderPage("#/");
 
-const mainLogo = document.querySelector(".main-logo");
-mainLogo.addEventListener("click", () => navigate("/"));
+window.addEventListener("hashchange", () => {
+  const { hash } = location;
+
+  const [pathname, queryString] = hash.split("?");
+
+  renderPage(pathname, queryString);
+});
